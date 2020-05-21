@@ -33,7 +33,7 @@
                         <a href="/profile">Личный кабинет</a>
                     </li>
                     <li>
-                        <a href="#!">Link 3</a>
+                        <a href="/about-smartcontract">О смарт-контрактах</a>
                     </li>
                     <li>
                         <a href="#!">Link 4</a>

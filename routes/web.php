@@ -12,19 +12,26 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Auth::routes();
 
 Route::get('/', function () {
     return view('pages/main');
 });
 
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/test', function () {
-    return view('pages/test');
+Route::get('/about-smartcontract', function () {
+    return view('pages/about-smartcontract');
 });
 
 Route::get('/profile', function () {
-    return view('pages/profile');
+    return view('pages/profile', ['page' => '/']);
 })->middleware('auth')->name('profile');
 
+Route::get('/profile{pattern}', function ($page) {
+    return view('pages/profile', ['page' => $page]);
+})->middleware('auth')->where('pattern', '.*');
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/test', function () {
+    return view('pages/test');
+});

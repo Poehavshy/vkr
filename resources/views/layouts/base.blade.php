@@ -10,7 +10,7 @@
         @include('includes.header')
     </header>
 
-    <div id="main" class="content full-height bg-white shadow-sm marg-tb p-3">
+    <div id="main" class="content full-height bg-white shadow-sm marg-tb-15 p-3">
 
         @yield('content')
 

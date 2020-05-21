@@ -51,8 +51,20 @@ body {
   margin-bottom: 30px;
 }
 
-.marg-tb {
+.marg-tb-15 {
   margin: 15px 0;
+}
+
+.marg-tb-30 {
+  margin: 30px 0;
+}
+
+.marg-lr-50 {
+  margin: 0 50px;
+}
+
+.marg-profile {
+  margin: 30px 50px;
 }
 
 .ta-j {
@@ -61,6 +73,10 @@ body {
 
 .ta-c {
   text-align: center;
+}
+
+.ta-l {
+  text-align: left;
 }
 
 .smart-text {
@@ -73,7 +89,7 @@ body {
   flex-wrap: wrap;
   align-items: stretch;
   align-content: center;
-  margin: 15px 50px;
+  margin: 25px 50px;
 }
 
 .w-100px {
@@ -87,6 +103,15 @@ body {
 }
 
 .fs-18 {
+  font-size: 18px;
+}
+
+.child {
+  font-size: 20px !important;
+}
+
+.child + .child {
+  margin-left: 15px;
   font-size: 18px;
 }
 
