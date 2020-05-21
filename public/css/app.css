@@ -103,7 +103,7 @@ body {
 }
 
 .fs-18 {
-  font-size: 18px;
+  font-size: 18px !important;
 }
 
 .child {

@@ -33,10 +33,10 @@
                         <a href="/profile">Личный кабинет</a>
                     </li>
                     <li>
-                        <a href="/about-smartcontract">О смарт-контрактах</a>
+                        <a href="/profile/create-contract">Создать контракт</a>
                     </li>
                     <li>
-                        <a href="#!">Link 4</a>
+                        <a href="/about-smartcontract">О смарт-контрактах</a>
                     </li>
                 </ul>
 
