@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('pages/test');
+    return view('pages/main');
 });
 
 Auth::routes();
@@ -28,14 +28,3 @@ Route::get('/profile', function () {
     return view('pages/profile');
 })->middleware('auth')->name('profile');
 
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');

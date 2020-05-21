@@ -6,12 +6,11 @@ body {
   color: #636b6f;
   font-family: "Nunito", sans-serif;
   font-weight: 200;
-  height: 100vh;
   margin: 0;
 }
 
 .full-height {
-  height: 100vh;
+  min-height: 60vh;
 }
 
 .flex-center {
@@ -35,7 +34,7 @@ body {
 }
 
 .title {
-  font-size: 84px;
+  font-size: 70px;
 }
 
 .links > a {
@@ -50,6 +49,51 @@ body {
 
 .m-b-md {
   margin-bottom: 30px;
+}
+
+.marg-tb {
+  margin: 15px 0;
+}
+
+.ta-j {
+  text-align: justify;
+}
+
+.ta-c {
+  text-align: center;
+}
+
+.smart-text {
+  font-size: 20px;
+  margin: 15px 50px;
+}
+
+.box {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  align-content: center;
+  margin: 15px 50px;
+}
+
+.w-100px {
+  width: 100px;
+}
+
+.img-text {
+  font-size: 20px;
+  margin-top: 10px;
+  font-weight: 900;
+}
+
+.fs-18 {
+  font-size: 18px;
+}
+
+@media (min-width: 768px) {
+  .box {
+    flex-wrap: nowrap;
+  }
 }
 
 /*!
