@@ -1,0 +1,26 @@
+.create_contract_form {
+    width: 75%;
+    border-radius: 30px;
+    background-color: #c7eed8;
+}
+
+.contract_box {
+    transition: 1s ease-in-out;
+    display: flex;
+    justify-content: center;
+}
+
+.fields {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.field {
+    width: 60%;
+    margin: 20px auto 0 auto;
+}
+
+.display_none {
+    display: none;
+}

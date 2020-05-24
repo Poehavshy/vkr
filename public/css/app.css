@@ -1,126 +1,5 @@
 @import url(https://fonts.googleapis.com/css?family=Nunito);@charset "UTF-8";
 
-html,
-body {
-  background-color: #fff;
-  color: #636b6f;
-  font-family: "Nunito", sans-serif;
-  font-weight: 200;
-  margin: 0;
-}
-
-.full-height {
-  min-height: 60vh;
-}
-
-.flex-center {
-  align-items: center;
-  display: flex;
-  justify-content: center;
-}
-
-.position-ref {
-  position: relative;
-}
-
-.top-right {
-  position: absolute;
-  right: 10px;
-  top: 18px;
-}
-
-.content {
-  text-align: center;
-}
-
-.title {
-  font-size: 70px;
-}
-
-.links > a {
-  color: #636b6f;
-  padding: 0 25px;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.1rem;
-  text-decoration: none;
-  text-transform: uppercase;
-}
-
-.m-b-md {
-  margin-bottom: 30px;
-}
-
-.marg-tb-15 {
-  margin: 15px 0;
-}
-
-.marg-tb-30 {
-  margin: 30px 0;
-}
-
-.marg-lr-50 {
-  margin: 0 50px;
-}
-
-.marg-profile {
-  margin: 30px 50px;
-}
-
-.ta-j {
-  text-align: justify;
-}
-
-.ta-c {
-  text-align: center;
-}
-
-.ta-l {
-  text-align: left;
-}
-
-.smart-text {
-  font-size: 20px;
-  margin: 15px 50px;
-}
-
-.box {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: stretch;
-  align-content: center;
-  margin: 25px 50px;
-}
-
-.w-100px {
-  width: 100px;
-}
-
-.img-text {
-  font-size: 20px;
-  margin-top: 10px;
-  font-weight: 900;
-}
-
-.fs-18 {
-  font-size: 18px !important;
-}
-
-.child {
-  font-size: 20px !important;
-}
-
-.child + .child {
-  margin-left: 15px;
-  font-size: 18px;
-}
-
-@media (min-width: 768px) {
-  .box {
-    flex-wrap: nowrap;
-  }
-}
-
 /*!
  * Bootstrap v4.5.0 (https://getbootstrap.com/)
  * Copyright 2011-2020 The Bootstrap Authors
@@ -11052,5 +10931,172 @@ a.text-dark:focus {
     color: inherit;
     border-color: #dee2e6;
   }
+}
+
+html,
+body {
+  background-color: #fff;
+  color: #636b6f;
+  font-family: "Nunito", sans-serif;
+  font-weight: 200;
+  margin: 0;
+}
+
+.full-height {
+  min-height: 60vh;
+}
+
+.flex-center {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.position-ref {
+  position: relative;
+}
+
+.top-right {
+  position: absolute;
+  right: 10px;
+  top: 18px;
+}
+
+.content {
+  text-align: center;
+}
+
+.title {
+  font-size: 70px;
+}
+
+.links > a {
+  color: #636b6f;
+  padding: 0 25px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.1rem;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.m-b-md {
+  margin-bottom: 30px;
+}
+
+.marg-tb-15 {
+  margin: 15px 0;
+}
+
+.marg-tb-30 {
+  margin: 30px 0;
+}
+
+.marg-lr-50 {
+  margin: 0 50px;
+}
+
+.marg-profile {
+  margin: 30px 50px;
+}
+
+.ta-j {
+  text-align: justify;
+}
+
+.ta-c {
+  text-align: center;
+}
+
+.ta-l {
+  text-align: left;
+}
+
+.smart-text {
+  font-size: 20px;
+  margin: 15px 50px;
+}
+
+.box {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  align-content: center;
+  margin: 25px 50px;
+}
+
+.w-100px {
+  width: 100px;
+}
+
+.img-text {
+  font-size: 20px;
+  margin-top: 10px;
+  font-weight: 900;
+}
+
+.error-text {
+  font-size: 20px;
+  margin-top: 10px;
+  font-weight: 700;
+  color: red;
+}
+
+.fs-18 {
+  font-size: 18px !important;
+}
+
+.fs-20 {
+  font-size: 20px !important;
+}
+
+.child {
+  font-size: 20px !important;
+}
+
+.child + .child {
+  margin-left: 15px;
+  font-size: 18px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  /* display: none; <- Crashes Chrome on hover */
+  -webkit-appearance: none;
+  margin: 0;
+  /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+@media (min-width: 768px) {
+  .box {
+    flex-wrap: nowrap;
+  }
+}
+
+.create_contract_form {
+  width: 75%;
+  border-radius: 30px;
+  background-color: #c7eed8;
+}
+
+.contract_box {
+  transition: 1s ease-in-out;
+  display: flex;
+  justify-content: center;
+}
+
+.fields {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.field {
+  width: 60%;
+  margin: 20px auto 0 auto;
+}
+
+.display_none {
+  display: none;
 }
 

@@ -99,8 +99,19 @@ html, body {
     font-weight: 900;
 }
 
+.error-text {
+    font-size: 20px;
+    margin-top: 10px;
+    font-weight: 700;
+    color: red;
+}
+
 .fs-18 {
     font-size: 18px !important;
+}
+
+.fs-20 {
+    font-size: 20px !important;
 }
 
 .child {
@@ -110,4 +121,11 @@ html, body {
 .child + .child {
     margin-left: 15px;
     font-size: 18px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 }
