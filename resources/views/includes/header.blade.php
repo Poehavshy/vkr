@@ -10,7 +10,15 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Left Side Of Navbar -->
             <ul class="navbar-nav mr-auto">
-
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Главная страница</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about-smartcontract">О смарт-контрактах</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/profile/create-contract">Создать контракт</a>
+                </li>
             </ul>
 
             <!-- Right Side Of Navbar -->
@@ -33,6 +41,8 @@
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="{{ route('profile') }}">Мой кабинет</a>
+                            <a class="dropdown-item" href="/profile/create-contract/">Создать контракт</a>
+                            <a class="dropdown-item" href="/profile/my-contract/">Мои контракты</a>
                             <a class="dropdown-item" href="{{ route('logout') }}"
                                onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

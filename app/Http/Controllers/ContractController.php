@@ -33,7 +33,7 @@ class ContractController extends Controller
         $data = Field::where('active', 1)->where('template_id', $template_id)->orderBy('order', 'asc')->get();
         $fields = array();
         foreach ($data as $field){
-            $fields[] = array('id'=> $field->id, 'name' => $field->name, 'type' => $field->type);
+            $fields[] = array('id'=> $field->id, 'name' => $field->name, 'type' => $field->type, 'attr' => $field->attr);
         }
         return $fields;
     }

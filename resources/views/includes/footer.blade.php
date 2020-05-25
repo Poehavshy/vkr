@@ -27,16 +27,16 @@
 
                 <ul class="list-unstyled">
                     <li>
-                        <a href="/">Главная страница</a>
+                        <a class="ftr-link" href="/">Главная страница</a>
                     </li>
                     <li>
-                        <a href="/profile">Личный кабинет</a>
+                        <a class="ftr-link" href="/profile">Личный кабинет</a>
                     </li>
                     <li>
-                        <a href="/profile/create-contract">Создать контракт</a>
+                        <a class="ftr-link" href="/profile/create-contract">Создать контракт</a>
                     </li>
                     <li>
-                        <a href="/about-smartcontract">О смарт-контрактах</a>
+                        <a class="ftr-link" href="/about-smartcontract">О смарт-контрактах</a>
                     </li>
                 </ul>
 

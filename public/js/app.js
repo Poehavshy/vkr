@@ -37226,10 +37226,23 @@ module.exports = function(module) {
 /***/ (function(module, exports) {
 
 $(document).ready(function () {
-  $('.mdb-select').materialSelect();
+  $('#create_contract').on('submit', function (event) {
+    event.preventDefault();
+    $('#description_template p').html('Контракт создается..');
+    $('#fields_contract').addClass('display_none');
+    $('#place_for_fields').html('');
+    $('#select_template').val(0);
+  });
 });
 
 function getTemplate(id) {
+  if (id === '0') {
+    $('#description_template p').html('');
+    $('#fields_contract').addClass('display_none');
+    $('#place_for_fields').html('');
+    return;
+  }
+
   $.ajax({
     url: "/contract/get_template/",
     method: "POST",
@@ -37241,7 +37254,6 @@ function getTemplate(id) {
     },
     success: function success(response) {
       if (response.ret_status === 'ok') {
-        console.log(response);
         $('#description_template p').html(response.description_template);
         $('#fields_contract').removeClass('display_none');
         $('#place_for_fields').html(response.fields_view);

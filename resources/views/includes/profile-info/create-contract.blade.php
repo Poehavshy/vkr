@@ -3,26 +3,15 @@ use App\Template;
 @endphp
 <div>
     <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle fs-20" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Шаблон контракта
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <select id="select_template" onchange="getTemplate(this.value)" class="custom-select custom-select-lg mb-3 select-contract">
+            <option selected value="0">Выберите шаблон контракта..</option>
             @php
-            $templates = \App\Template::select('id', 'name')->where('active', '1')->get();
-            foreach ($templates as $template){
-                echo '<a class="dropdown-item fs-18" href="#" onclick="getTemplate('.$template->id.')">'.$template->name.'</a>';
-            }
+                $templates = \App\Template::select('id', 'name')->where('active', '1')->get();
+                foreach ($templates as $template){
+                    echo '<option value="'.$template->id.'">'.$template->name.'</a>';
+                }
             @endphp
-        </div>
-{{--        <select class="custom-select custom-select-lg mb-3">--}}
-{{--            <option selected disabled>Выберите шаблон контракта..</option>--}}
-{{--            @php--}}
-{{--                $templates = \App\Template::select('id', 'name')->where('active', '1')->get();--}}
-{{--                foreach ($templates as $template){--}}
-{{--                    echo '<option value="'.$template->id.'" onclick="getTemplate('.$template->id.')">'.$template->name.'</a>';--}}
-{{--                }--}}
-{{--            @endphp--}}
-{{--        </select>--}}
+        </select>
         <div id="error_message"><p class="error-text"></p></div>
         <div id="description_template"><p class="img-text"></p></div>
         <div id="fields_contract" class="contract_box display_none">

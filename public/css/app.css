@@ -11067,6 +11067,22 @@ input::-webkit-inner-spin-button {
   /* <-- Apparently some margin are still there even though it's hidden */
 }
 
+.select-contract {
+  min-width: 33%;
+  max-width: 50%;
+}
+
+.ftr-link {
+  text-decoration: none;
+  color: #636b6f;
+  transition: 0.2s ease-in-out;
+}
+
+.ftr-link:hover {
+  color: #343a40;
+  text-decoration: none;
+}
+
 @media (min-width: 768px) {
   .box {
     flex-wrap: nowrap;
