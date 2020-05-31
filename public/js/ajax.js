@@ -1,10 +1,41 @@
 $(document).ready(function () {
     $('#create_contract').on('submit', function (event) {
         event.preventDefault();
-        $('#description_template p').html('Контракт создается..');
-        $('#fields_contract').addClass('display_none');
-        $('#place_for_fields').html('');
-        $('#select_template').val(0);
+        // $('#create_contract button[type=submit]').attr('disabled', 'disabled');
+        // $('#description_template p').html('Контракт создается..');
+        // $('#fields_contract').addClass('display_none');
+        // $('#place_for_fields').html('');
+        // $('#select_template').val(0);
+        $.ajax({
+            url: "/contract/check_fields/",
+            method: "POST",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: $(this).serializeArray(),
+            success: function (response) {
+                console.log(response);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log('jqXHR:');
+                console.log(jqXHR);
+                console.log('textStatus:');
+                console.log(textStatus);
+                console.log('errorThrown:');
+                console.log(errorThrown);
+            }
+        });
+    });
+
+
+    $(':regex(id, contract_*) button').on('click', function () {
+        let copyText = this.parentNode.querySelector('input');
+        copyText.select();
+        document.execCommand("copy");
+        $(this).addClass('isClick');
+        let btn = this;
+        this.innerText = 'Скопировано';
+        setTimeout(() => {$(btn).text('Скопировать');$(btn).removeClass('isClick');}, 5000);
     });
 });
 
@@ -47,3 +78,18 @@ function getTemplate(id) {
         }
     });
 }
+
+jQuery.expr[':'].regex = function(elem, index, match) {
+    var matchParams = match[3].split(','),
+        validLabels = /^(data|css):/,
+        attr = {
+            method: matchParams[0].match(validLabels) ?
+                matchParams[0].split(':')[0] : 'attr',
+            property: matchParams.shift().replace(validLabels,'')
+        },
+        regexFlags = 'ig',
+        regex = new RegExp(matchParams.join('').replace(/^\s+|\s+$/g,''), regexFlags);
+    return regex.test(jQuery(elem)[attr.method](attr.property));
+}
+
+

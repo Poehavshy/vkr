@@ -37,3 +37,5 @@ Route::get('/test', function () {
 });
 
 Route::post('/contract/get_template/', 'ContractController@getTemplate');
+Route::post('/contract/check_fields/', 'ContractController@checkFields');
+

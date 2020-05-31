@@ -5,13 +5,53 @@ namespace App\Http\Controllers;
 use App\Field;
 use App\Template;
 use Illuminate\Http\Request;
-use function Sodium\add;
+use App\Classes\EthereumValidator;
 
 class ContractController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth');
+    }
+
+
+    public function checkFields()
+    {
+        $error = array();
+        if (!empty($_POST)){
+            foreach ($_POST as $key => $field){
+                if ($key === 'wallet'){
+                    $eth_valid = new EthereumValidator();
+                    if($eth_valid->isAddress($field) !== true){
+                        $error[$key] = 'Некорректный адрес кошелька Ethereum';
+                    }
+                }
+                elseif ($key === 'product_id'){
+                    if($field == ''){
+                        $error[$key] = 'Некорректный id товара';
+                    }
+                }
+                elseif ($key === 'product_price'){
+                    if(floatval($field) <= 0){
+                        $error[$key] = 'Стоимость товара должна быть положительной';
+                    }
+                }
+                elseif ($key === 'days'){
+                    if(intval($field) <= 0){
+                        $error[$key] = 'Количество дней должно быть положительным';
+                    }
+                }
+            }
+            if (empty($error)){
+                return array('ret_status' => 'ok');
+            }
+            else {
+                return array('ret_status' => 'not ok', 'error_array' => $error);
+            }
+        }
+        else {
+            return array('ret_status' => 'error', 'error_text' => 'Empty post');
+        }
     }
 
 
@@ -33,7 +73,7 @@ class ContractController extends Controller
         $data = Field::where('active', 1)->where('template_id', $template_id)->orderBy('order', 'asc')->get();
         $fields = array();
         foreach ($data as $field){
-            $fields[] = array('id'=> $field->id, 'name' => $field->name, 'type' => $field->type, 'attr' => $field->attr);
+            $fields[] = array('id'=> $field->id, 'name' => $field->name, 'type' => $field->type, 'attr' => $field->attr, 'purpose' => $field->purpose);
         }
         return $fields;
     }
