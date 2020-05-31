@@ -36,6 +36,7 @@ Route::get('/test', function () {
     return view('pages/test');
 });
 
+Route::post('/contract/get_list_templates/', 'ContractController@getListTemplates');
 Route::post('/contract/get_template/', 'ContractController@getTemplate');
 Route::post('/contract/check_fields/', 'ContractController@checkFields');
 

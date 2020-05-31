@@ -6,6 +6,7 @@ use App\Field;
 use App\Template;
 use Illuminate\Http\Request;
 use App\Classes\EthereumValidator;
+use App\Classes\Contract;
 
 class ContractController extends Controller
 {
@@ -54,6 +55,12 @@ class ContractController extends Controller
         }
     }
 
+    public function getListTemplates(){
+        $cntrct = new Contract();
+        $templates = $cntrct->getTemplates();
+        $templates_view = view('includes.source.contract-templates', ['templates' => $templates])->render();
+        return array('ret_status' => 'ok', 'templates_view' => $templates_view);
+    }
 
     public function getTemplate()
     {
