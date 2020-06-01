@@ -61,6 +61,29 @@ class Contract
         }
     }
 
+    public function getContracts($ids){
+        $response = Http::withToken($this->token)->post($this->url.'contracts', [
+            'ids' => $ids
+        ]);
+        if ($response->successful()){
+            return $response->json();
+        }
+        else {
+            return [];
+        }
+    }
+
+    public function destroyContract($id){
+        $response = Http::withToken($this->token)->get($this->url.'contracts/'.$id.'/destroy');
+        if ($response->successful()){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+
     private function fakes(){
         Http::fake([
             'test.ru/auth' => Http::response(['token' => '12321432543534gdsfhh'], 200, ['Headers']),
@@ -85,7 +108,26 @@ class Contract
                     ['name' => 'Стоимость токена', 'type' => 'price']
                 ]
             ], 200, ['Headers']),
-            'test.ru/create-contract' => Http::response(['id' => rand(1, 1000)], 200, ['Headers'])
+            'test.ru/create-contract' => Http::response(['id' => rand(1, 1000)], 200, ['Headers']),
+            'test.ru/contracts' => Http::response([
+                [
+                    'id' => '666',
+                    'template_id' => '1',
+                    'created' => '19:15 01.06.2020',
+                    'address' => '0x1543d0F83489e82A1344DF6827B23d541F235A50',
+                    'status' => 'Создан',
+                    'guide' => 'Инструкция'
+                ],
+                [
+                    'id' => '120',
+                    'template_id' => '2',
+                    'created' => '19:00 01.06.2020',
+                    'address' => '0x1543d0F83489e7771344DF6827B23d541F235A50',
+                    'status' => 'Создан',
+                    'guide' => 'Инструкция'
+                ]
+            ], 200, ['Headers']),
+            'test.ru/contracts/*/destroy' => Http::response(['True'], 200, ['Headers']),
         ]);
     }
 }

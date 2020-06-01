@@ -73,7 +73,47 @@ $(document).ready(function () {
     });
 
 
+    if (window.location.pathname === '/profile/create-contract'){
+        getListTemplates();
+    }
+    else if (window.location.pathname === '/profile/my-contract'){
+        getContracts();
+    }
+});
 
+function getContracts() {
+    $.ajax({
+        url: "/contract/get_contracts/",
+        method: "POST",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        data: {},
+        success: function (response) {
+            if (response.ret_status === 'ok'){
+                $('#contracts_table tbody').html(response.contracts_view);
+                activateCopyBtn();
+            }
+            else if (response.ret_status === 'not ok'){
+                $('#error_message p').html(response.ret_text);
+                $('#contracts_table').addClass('display_none');
+            }
+            else {
+                $('#error_message p').html('Error: unexpected error.');
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log('jqXHR:');
+            console.log(jqXHR);
+            console.log('textStatus:');
+            console.log(textStatus);
+            console.log('errorThrown:');
+            console.log(errorThrown);
+        }
+    });
+}
+
+function activateCopyBtn() {
     $('.copy_btn').on('click', function () {
         let copyText = this.parentNode.querySelector('input');
         copyText.select();
@@ -83,10 +123,7 @@ $(document).ready(function () {
         this.innerText = 'Скопировано';
         setTimeout(() => {$(btn).text('Скопировать');$(btn).removeClass('isClick');}, 5000);
     });
-    if (window.location.pathname === '/profile/create-contract'){
-        getListTemplates();
-    }
-});
+}
 
 function getListTemplates() {
     $.ajax({
@@ -102,6 +139,40 @@ function getListTemplates() {
             }
             else if (response.ret_status === 'error'){
                 $('#error_message p').html('Error: ' + response.error_text);
+            }
+            else {
+                $('#error_message p').html('Error: unexpected error.');
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log('jqXHR:');
+            console.log(jqXHR);
+            console.log('textStatus:');
+            console.log(textStatus);
+            console.log('errorThrown:');
+            console.log(errorThrown);
+        }
+    });
+}
+
+function removeContract(id) {
+    $.ajax({
+        url: "/contract/remove/",
+        method: "POST",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        data: {
+            'id': id
+        },
+        success: function (response) {
+            if (response.ret_status === 'ok'){
+                $('#contracts_table tbody').html(response.contracts_view);
+                activateCopyBtn();
+            }
+            else if (response.ret_status === 'not ok'){
+                $('#error_message p').html(response.ret_text);
+                $('#contracts_table').addClass('display_none');
             }
             else {
                 $('#error_message p').html('Error: unexpected error.');

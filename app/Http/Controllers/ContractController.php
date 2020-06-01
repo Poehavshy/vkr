@@ -18,9 +18,50 @@ class ContractController extends Controller
         $this->middleware('auth');
     }
 
+    public function removeContract()
+    {
+        if (!empty($_POST) && isset($_POST['id'])){
+            $contract = new Contract();
+            if ($contract->destroyContract($_POST['id'])){
+                DBContract::where('id', $_POST['id'])->delete();
+                return $this->getContracts();
+            }
+            else {
+                return array('ret_status' => 'not ok', 'error_text' => 'Remove error');
+            }
+        }
+        else {
+            return array('ret_status' => 'error', 'error_text' => 'Empty post');
+        }
+    }
+
+    public function getContracts()
+    {
+        $ids = array();
+        $tmp = DBContract::select('id')->where('userId', Auth::user()->id)->get();
+        foreach ($tmp as $id) {
+            $ids[] = $id['id'];
+        }
+        if (empty($ids)) {
+            return array('ret_status' => 'not ok', 'ret_text' => 'У Вас нет контрактов.');
+        } else {
+            $contract = new Contract();
+            $contracts = $contract->getContracts($ids);
+            foreach ($contracts as $key => $item){
+                if (!in_array($item['id'], $ids)){
+                    unset($contracts[$key]);
+                    continue;
+                }
+                $contracts[$key]['template'] = $contract->getTemplate($item['template_id'])['name'];
+            }
+            file_put_contents('log.out', "<pre>".print_r($contracts, true)."</pre>" , FILE_APPEND);
+
+            $contracts_view = view('includes.source.contract-table', ['contracts' => $contracts])->render();
+            return array('ret_status' => 'ok', 'contracts_view' => $contracts_view);
+        }
+    }
     public function createContract()
     {
-        $error = array();
         if (!empty($_POST)){
             $params = array('address', 'price');
             $fields = array();
