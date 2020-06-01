@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Field;
 use App\Template;
+use App\User;
+use App\Contract as DBContract;
 use Illuminate\Http\Request;
 use App\Classes\EthereumValidator;
 use App\Classes\Contract;
+use Illuminate\Support\Facades\Auth;
 
 class ContractController extends Controller
 {
@@ -17,7 +20,23 @@ class ContractController extends Controller
 
     public function createContract()
     {
-
+        $error = array();
+        if (!empty($_POST)){
+            $params = array('address', 'price');
+            $fields = array();
+            foreach ($_POST as $key => $value){
+                if (in_array($key, $params)){
+                    $fields[$key] = $value;
+                }
+            }
+            $contract = new Contract();
+            $contract_id = $contract->createContract($_POST['template_id'], $fields);
+            DBContract::create(['id'=>$contract_id, 'userId'=>Auth::user()->id]);
+            return array('ret_status' => 'ok', 'contract_id' => $contract_id);
+        }
+        else {
+            return array('ret_status' => 'error', 'error_text' => 'Empty post');
+        }
     }
 
     public function checkFields()
@@ -25,7 +44,7 @@ class ContractController extends Controller
         $error = array();
         if (!empty($_POST)){
             foreach ($_POST as $key => $field){
-                if ($key === 'wallet'){
+                if ($key === 'address'){
                     $eth_valid = new EthereumValidator();
                     if($eth_valid->isAddress($field) !== true){
                         $error[$key] = 'Некорректный адрес кошелька Ethereum';
@@ -77,19 +96,17 @@ class ContractController extends Controller
         foreach ($data as $field){
             if($field['type'] === 'address'){
                 $HTMLtype = 'text';
-                $purpose = 'wallet';
                 $HTMLattr = 'placeholder="0x493c4afb73b490e988650b9758e7736c72af748f"';
             }
             elseif ($field['type'] === 'price'){
                 $HTMLtype = 'number';
-                $purpose = 'price';
                 $HTMLattr = 'value="0.000001" min="0.000001" max="1000" step="0.000001"';
             }
             else {
                 $HTMLtype = 'text';
-                $purpose = '';
+                $HTMLattr = '';
             }
-            $fields[] = array('id'=> $idx, 'name' => $field['name'], 'type' => $HTMLtype, 'attr' => $HTMLattr, 'purpose' => $purpose);
+            $fields[] = array('id'=> $idx, 'name' => $field['name'], 'type' => $HTMLtype, 'attr' => $HTMLattr, 'purpose' => $field['type']);
             ++$idx;
         }
         return $fields;

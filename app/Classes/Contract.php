@@ -48,6 +48,19 @@ class Contract
         }
     }
 
+    public function createContract($template_id, $fields){
+        $response = Http::withToken($this->token)->post($this->url.'create-contract', [
+            'id' => $template_id,
+            'params' => $fields
+        ]);
+        if ($response->successful()){
+            return $response['id'];
+        }
+        else {
+            return "";
+        }
+    }
+
     private function fakes(){
         Http::fake([
             'test.ru/auth' => Http::response(['token' => '12321432543534gdsfhh'], 200, ['Headers']),
@@ -64,14 +77,15 @@ class Contract
                 ]
             ], 200, ['Headers']),
             'test.ru/templates/2' => Http::response([
-            'id' => '2',
-            'name' => 'Продажа токенов',
-            'description' => 'Продажа токенов через смарт-контракт',
-            'parameters_list' => [
-                ['name' => 'Ваш адрес кошелька', 'type' => 'address'],
-                ['name' => 'Стоимость токена', 'type' => 'price']
-            ]
-        ], 200, ['Headers'])
+                'id' => '2',
+                'name' => 'Продажа токенов',
+                'description' => 'Продажа токенов через смарт-контракт',
+                'parameters_list' => [
+                    ['name' => 'Ваш адрес кошелька', 'type' => 'address'],
+                    ['name' => 'Стоимость токена', 'type' => 'price']
+                ]
+            ], 200, ['Headers']),
+            'test.ru/create-contract' => Http::response(['id' => rand(1, 1000)], 200, ['Headers'])
         ]);
     }
 }

@@ -2,21 +2,47 @@ $(document).ready(function () {
     $('#create_contract').on('submit', function (event) {
         event.preventDefault();
         $('#create_contract button[type=submit]').attr('disabled', 'disabled');
-        // $('#description_template p').html('Контракт создается..');
-        // $('#fields_contract').addClass('display_none');
-        // $('#place_for_fields').html('');
-        // $('#select_template').val(0);
+        let formData = $(this).serializeArray();
         $.ajax({
             url: "/contract/check_fields/",
             method: "POST",
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            data: $(this).serializeArray(),
+            data: formData,
             success: function (response) {
-                console.log(response);
                 if (response.ret_status === 'ok'){
-
+                    $('#description_template p').html('Контракт создается..');
+                    $('#fields_contract').addClass('display_none');
+                    $('#place_for_fields').html('');
+                    $('#select_template').val(0);
+                    $.ajax({
+                        url: "/contract/create/",
+                        method: "POST",
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        data: formData,
+                        success: function (response) {
+                            if (response.ret_status === 'ok'){
+                                $('#description_template p').html('Контракт создан.<br>Идентификатор: '+response.contract_id+'<br>Для отслеживания статуса пройдите в "Мои контракты".');
+                            }
+                            else if (response.ret_status === 'error'){
+                                $('#error_message p').html('Error: ' + response.error_text);
+                            }
+                            else {
+                                $('#error_message p').html('Error: unexpected error.');
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log('jqXHR:');
+                            console.log(jqXHR);
+                            console.log('textStatus:');
+                            console.log(textStatus);
+                            console.log('errorThrown:');
+                            console.log(errorThrown);
+                        }
+                    });
                 }
                 else if (response.ret_status === 'not ok'){
                     let error_text = '';
@@ -28,9 +54,11 @@ $(document).ready(function () {
                 }
                 else if (response.ret_status === 'error'){
                     $('#error_contract_message p').html('Error: ' + response.error_text);
+                    $('#create_contract button[type=submit]').removeAttr('disabled');
                 }
                 else {
                     $('#error_contract_message p').html('Error: unexpected error.');
+                    $('#create_contract button[type=submit]').removeAttr('disabled');
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -111,6 +139,8 @@ function getTemplate(id) {
                 $('#description_template p').html(response.description_template);
                 $('#fields_contract').removeClass('display_none');
                 $('#place_for_fields').html(response.fields_view);
+                $('#template_id').val(id);
+                $('#create_contract button[type=submit]').removeAttr('disabled');
             }
             else if (response.ret_status === 'error'){
                 $('#error_message p').html('Error: ' + response.error_text);
