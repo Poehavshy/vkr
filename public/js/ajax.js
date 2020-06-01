@@ -1,7 +1,7 @@
 $(document).ready(function () {
     $('#create_contract').on('submit', function (event) {
         event.preventDefault();
-        // $('#create_contract button[type=submit]').attr('disabled', 'disabled');
+        $('#create_contract button[type=submit]').attr('disabled', 'disabled');
         // $('#description_template p').html('Контракт создается..');
         // $('#fields_contract').addClass('display_none');
         // $('#place_for_fields').html('');
@@ -15,6 +15,23 @@ $(document).ready(function () {
             data: $(this).serializeArray(),
             success: function (response) {
                 console.log(response);
+                if (response.ret_status === 'ok'){
+
+                }
+                else if (response.ret_status === 'not ok'){
+                    let error_text = '';
+                    for(let key in response.error_array){
+                        error_text += key + ': ' + response.error_array[key] + '<br>';
+                    }
+                    $('#error_contract_message p').html(error_text);
+                    $('#create_contract button[type=submit]').removeAttr('disabled');
+                }
+                else if (response.ret_status === 'error'){
+                    $('#error_contract_message p').html('Error: ' + response.error_text);
+                }
+                else {
+                    $('#error_contract_message p').html('Error: unexpected error.');
+                }
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log('jqXHR:');
@@ -29,7 +46,7 @@ $(document).ready(function () {
 
 
 
-    $(':regex(id, contract_*) button').on('click', function () {
+    $('.copy_btn').on('click', function () {
         let copyText = this.parentNode.querySelector('input');
         copyText.select();
         document.execCommand("copy");

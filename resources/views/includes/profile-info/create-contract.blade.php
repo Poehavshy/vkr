@@ -10,6 +10,7 @@ use App\Template;
             <form id="create_contract" class="shadow-sm create_contract_form" action="">
                 @csrf
                 <div id="place_for_fields"></div>
+                <div id="error_contract_message"><p class="error-text"></p></div>
                 <button type="submit" class="btn btn-success fs-20 marg-tb-30">Создать смарт-контракт</button>
             </form>
         </div>

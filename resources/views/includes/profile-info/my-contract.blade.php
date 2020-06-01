@@ -17,7 +17,7 @@
             <td>Обмен вещей</td>
             <td id="contract_1">
                 <input type="text" class="not_input" value="0x1543d0F83489e82A1344DF6827B23d541F235A50">
-                <button class="btn btn-outline-success">Скопировать</button>
+                <button class="btn btn-outline-success copy_btn">Скопировать</button>
             </td>
             <td><button class="btn btn-outline-info">Посмотреть</button></td>
             <td>21.02.2020</td>
@@ -29,7 +29,7 @@
             <td>Обмен вещей</td>
             <td id="contract_2">
                 <input type="text" class="not_input" value="0x1543d0F83489e82A7777DF6827B23d541F235A50">
-                <button class="btn btn-outline-success">Скопировать</button>
+                <button class="btn btn-outline-success copy_btn">Скопировать</button>
             </td>
             <td><button class="btn btn-outline-info">Посмотреть</button></td>
             <td>29.02.2020</td>
