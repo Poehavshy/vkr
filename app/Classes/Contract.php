@@ -108,20 +108,84 @@ class Contract
                     ['name' => 'Стоимость токена', 'type' => 'price']
                 ]
             ], 200, ['Headers']),
-            'test.ru/create-contract' => Http::response(['id' => rand(1, 1000)], 200, ['Headers']),
+            'test.ru/create-contract' => Http::response(['id' => rand(1, 10)], 200, ['Headers']),
             'test.ru/contracts' => Http::response([
                 [
-                    'id' => '489',
+                    'id' => '1',
                     'template_id' => '1',
-                    'created' => '19:15 01.06.2020',
+                    'created' => '19:11 01.06.2020',
                     'address' => '0x1543d0F83489e82A1344DF6827B23d541F235A50',
                     'status' => 'Создан',
                     'guide' => 'Инструкция лалалалалала'
                 ],
                 [
-                    'id' => '682',
+                    'id' => '2',
                     'template_id' => '2',
-                    'created' => '19:00 01.06.2020',
+                    'created' => '19:12 02.06.2020',
+                    'address' => '0x1543d0F83489e7771344DF6827B23d541F235A50',
+                    'status' => 'Создан',
+                    'guide' => 'Инструкция'
+                ],
+                [
+                    'id' => '3',
+                    'template_id' => '1',
+                    'created' => '19:13 03.06.2020',
+                    'address' => '0x1543d0F83489e82A1344DF6827B23d541F235A50',
+                    'status' => 'Создан',
+                    'guide' => 'Инструкция лалалалалала'
+                ],
+                [
+                    'id' => '4',
+                    'template_id' => '2',
+                    'created' => '19:14 04.06.2020',
+                    'address' => '0x1543d0F83489e7771344DF6827B23d541F235A50',
+                    'status' => 'Создан',
+                    'guide' => 'Инструкция'
+                ],
+                [
+                    'id' => '5',
+                    'template_id' => '1',
+                    'created' => '19:15 05.06.2020',
+                    'address' => '0x1543d0F83489e82A1344DF6827B23d541F235A50',
+                    'status' => 'Создан',
+                    'guide' => 'Инструкция лалалалалала'
+                ],
+                [
+                    'id' => '6',
+                    'template_id' => '2',
+                    'created' => '19:16 06.06.2020',
+                    'address' => '0x1543d0F83489e7771344DF6827B23d541F235A50',
+                    'status' => 'Создан',
+                    'guide' => 'Инструкция'
+                ],
+                [
+                    'id' => '7',
+                    'template_id' => '1',
+                    'created' => '19:17 07.06.2020',
+                    'address' => '0x1543d0F83489e82A1344DF6827B23d541F235A50',
+                    'status' => 'Создан',
+                    'guide' => 'Инструкция лалалалалала'
+                ],
+                [
+                    'id' => '8',
+                    'template_id' => '2',
+                    'created' => '19:18 08.06.2020',
+                    'address' => '0x1543d0F83489e7771344DF6827B23d541F235A50',
+                    'status' => 'Создан',
+                    'guide' => 'Инструкция'
+                ],
+                [
+                    'id' => '9',
+                    'template_id' => '1',
+                    'created' => '19:19 09.06.2020',
+                    'address' => '0x1543d0F83489e82A1344DF6827B23d541F235A50',
+                    'status' => 'Создан',
+                    'guide' => 'Инструкция лалалалалала'
+                ],
+                [
+                    'id' => '10',
+                    'template_id' => '2',
+                    'created' => '19:20 10.06.2020',
                     'address' => '0x1543d0F83489e7771344DF6827B23d541F235A50',
                     'status' => 'Создан',
                     'guide' => 'Инструкция'
