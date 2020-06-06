@@ -155,6 +155,39 @@ function getListTemplates() {
     });
 }
 
+function showInstruction(text){
+    $.ajax({
+        url: "/contract/get_instruction/",
+        method: "POST",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        data: {
+            'instruction': text
+        },
+        success: function (response) {
+            if (response.ret_status === 'ok'){
+                $('#place_instruction_form').html(response.instruction_view);
+                $("#instruction_form").modal('show');
+            }
+            else if (response.ret_status === 'error'){
+                alert('Error: ' + response.error_text);
+            }
+            else {
+                alert('Error: unexpected error.');
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log('jqXHR:');
+            console.log(jqXHR);
+            console.log('textStatus:');
+            console.log(textStatus);
+            console.log('errorThrown:');
+            console.log(errorThrown);
+        }
+    });
+}
+
 function removeContract(id) {
     $.ajax({
         url: "/contract/remove/",

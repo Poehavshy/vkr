@@ -111,15 +111,15 @@ class Contract
             'test.ru/create-contract' => Http::response(['id' => rand(1, 1000)], 200, ['Headers']),
             'test.ru/contracts' => Http::response([
                 [
-                    'id' => '666',
+                    'id' => '489',
                     'template_id' => '1',
                     'created' => '19:15 01.06.2020',
                     'address' => '0x1543d0F83489e82A1344DF6827B23d541F235A50',
                     'status' => 'Создан',
-                    'guide' => 'Инструкция'
+                    'guide' => 'Инструкция лалалалалала'
                 ],
                 [
-                    'id' => '120',
+                    'id' => '682',
                     'template_id' => '2',
                     'created' => '19:00 01.06.2020',
                     'address' => '0x1543d0F83489e7771344DF6827B23d541F235A50',

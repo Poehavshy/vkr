@@ -18,6 +18,17 @@ class ContractController extends Controller
         $this->middleware('auth');
     }
 
+    public function getInstruction()
+    {
+        if (!empty($_POST) && isset($_POST['instruction'])){
+            $instruction_view = view('includes.form.instruction', ['instruction' => $_POST['instruction']])->render();
+            return array('ret_status' => 'ok', 'instruction_view' => $instruction_view);
+        }
+        else {
+            return array('ret_status' => 'error', 'error_text' => 'Empty post');
+        }
+    }
+
     public function removeContract()
     {
         if (!empty($_POST) && isset($_POST['id'])){
@@ -54,7 +65,6 @@ class ContractController extends Controller
                 }
                 $contracts[$key]['template'] = $contract->getTemplate($item['template_id'])['name'];
             }
-            file_put_contents('log.out', "<pre>".print_r($contracts, true)."</pre>" , FILE_APPEND);
 
             $contracts_view = view('includes.source.contract-table', ['contracts' => $contracts])->render();
             return array('ret_status' => 'ok', 'contracts_view' => $contracts_view);

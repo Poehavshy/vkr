@@ -15,3 +15,4 @@
     <tbody>
     </tbody>
 </table>
+<div id="place_instruction_form"></div>
