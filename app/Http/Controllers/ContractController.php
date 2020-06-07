@@ -58,12 +58,42 @@ class ContractController extends Controller
         } else {
             $contract = new Contract();
             $contracts = $contract->getContracts($ids);
+            if ($contracts === false){
+                return array('ret_status' => 'error', 'error_text' => 'Contract api return false. Retry.');
+            }
             foreach ($contracts as $key => $item){
                 if (!in_array($item['id'], $ids)){
                     unset($contracts[$key]);
                     continue;
                 }
                 $contracts[$key]['template'] = $contract->getTemplate($item['template_id'])['name'];
+            }
+            foreach ($contracts as $key => $item){
+                $full_guide = '<p class=\"fs-20 fw-6\"><strong>Инструкция для владельца:</strong></p>';
+                foreach ($item['creator_guide'] as $guide){
+                    if ($guide['status_id'] < $item['status']['id']){
+                        $full_guide .= '<p class=\"fs-18\"><strong>'.$guide['guide'].'</strong></p>';
+                    }
+                    elseif ($guide['status_id'] == $item['status']['id']){
+                        $full_guide .= '<p class=\"fs-18\"><strong><u>'.$guide['guide'].'</u></strong></p>';
+                    }
+                    else {
+                        $full_guide .= '<p class=\"fs-18\">'.$guide['guide'].'</p>';
+                    }
+                }
+                $full_guide .= '<hr><p class=\"fs-20 fw-6\"><strong>Инструкция для пользователя:</strong></p>';
+                foreach ($item['users_guide'] as $guide){
+                    if ($guide['status_id'] < $item['status']['id']){
+                        $full_guide .= '<p class=\"fs-18\"><strong>'.$guide['guide'].'</strong></p>';
+                    }
+                    elseif ($guide['status_id'] == $item['status']['id']){
+                        $full_guide .= '<p class=\"fs-18\"><strong><u>'.$guide['guide'].'</u></strong></p>';
+                    }
+                    else {
+                        $full_guide .= '<p class=\"fs-18\">'.$guide['guide'].'</p>';
+                    }
+                }
+                $contracts[$key]['guide'] = $full_guide;
             }
 
             $contracts_view = view('includes.source.contract-table', ['contracts' => $contracts])->render();
@@ -73,15 +103,18 @@ class ContractController extends Controller
     public function createContract()
     {
         if (!empty($_POST)){
-            $params = array('address', 'price');
+            $params = array('_token', 'template_id');
             $fields = array();
             foreach ($_POST as $key => $value){
-                if (in_array($key, $params)){
+                if (!in_array($key, $params)){
                     $fields[$key] = $value;
                 }
             }
             $contract = new Contract();
             $contract_id = $contract->createContract($_POST['template_id'], $fields);
+            if ($contract_id === false){
+                return array('ret_status' => 'error', 'error_text' => 'Contract api return false. Retry.');
+            }
             DBContract::create(['id'=>$contract_id, 'userId'=>Auth::user()->id]);
             return array('ret_status' => 'ok', 'contract_id' => $contract_id);
         }
@@ -95,6 +128,10 @@ class ContractController extends Controller
         $error = array();
         if (!empty($_POST)){
             foreach ($_POST as $key => $field){
+                if (strpos($key, '|')){
+                    $key = substr($key, strpos($key, '|') + 1, strlen($key));
+                }
+                continue;
                 if ($key === 'address'){
                     $eth_valid = new EthereumValidator();
                     if($eth_valid->isAddress($field) !== true){
@@ -122,15 +159,21 @@ class ContractController extends Controller
     public function getListTemplates(){
         $contract = new Contract();
         $templates = $contract->getTemplates();
+        if ($templates === false){
+            return array('ret_status' => 'error', 'error_text' => 'Contract api return false. Retry.');
+        }
         $templates_view = view('includes.source.contract-templates', ['templates' => $templates])->render();
         return array('ret_status' => 'ok', 'templates_view' => $templates_view);
     }
 
-    public function getTemplate()
+    public function getTemplate(Request $request)
     {
         if (isset($_POST['id']) && !empty($_POST['id'])) {
             $contract = new Contract();
             $template = $contract->getTemplate($_POST['id']);
+            if ($template === false){
+                return array('ret_status' => 'error', 'error_text' => 'Contract api return false. Retry.');
+            }
             $fields = self::genFields($template['parameters_list']);
             $fields_view = view('includes.source.contract-fields', ['fields' => $fields])->render();
             return array('ret_status' => 'ok', 'description_template' => $template['description'], 'fields_view' => $fields_view);

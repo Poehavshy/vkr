@@ -14,7 +14,7 @@ class AddPurposeToFieldsTable extends Migration
     public function up()
     {
         Schema::table('fields', function (Blueprint $table) {
-            $table->string('purpose', 255)->after('attr');
+            $table->string('purpose', 255)->default('')->after('attr');
         });
     }
 

@@ -16,7 +16,7 @@ Auth::routes(['verify' => true]);
 
 Route::get('/', function () {
     return view('pages/main');
-});
+})->name('home');
 
 Route::get('/about-smartcontract', function () {
     return view('pages/about-smartcontract');
@@ -29,8 +29,6 @@ Route::get('/profile', function () {
 Route::get('/profile{pattern}', function ($page) {
     return view('pages/profile', ['page' => $page]);
 })->middleware('auth')->middleware('verified')->where('pattern', '.*');
-
-Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/test', function () {
     return view('pages/test');

@@ -3,13 +3,19 @@ $(document).ready(function () {
         event.preventDefault();
         $('#create_contract button[type=submit]').attr('disabled', 'disabled');
         let formData = $(this).serializeArray();
+        let formDataCheck = $(this).serializeArray();
+        for (let field in formData){
+            if ($('input[name='+formData[field].name+']').data('purpose') !== undefined) {
+                formDataCheck[field].name += '|' + $('input[name=' + formData[field].name + ']').data('purpose');
+            }
+        }
         $.ajax({
             url: "/contract/check_fields/",
             method: "POST",
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            data: formData,
+            data: formDataCheck,
             success: function (response) {
                 if (response.ret_status === 'ok'){
                     $('#description_template p').html('Контракт создается..');
