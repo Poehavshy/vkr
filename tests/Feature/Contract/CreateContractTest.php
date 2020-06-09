@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Contract;
 
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -16,6 +17,11 @@ class CreateContractTest extends TestCase
     protected function contractRoute()
     {
         return 'profile/create-contract';
+    }
+
+    protected function tableRoute()
+    {
+        return 'profile/my-contract';
     }
 
     protected function templatesPostRoute()
@@ -58,14 +64,14 @@ class CreateContractTest extends TestCase
         return route('login');
     }
 
-    public function testUserCannotViewAProfileWhenNotAuthenticated()
+    public function testGuestCannotViewAProfile()
     {
         $response = $this->get($this->contractRoute());
 
         $response->assertRedirect($this->guestMiddlewareRoute());
     }
 
-    public function testUserCanViewAProfileWhenAuthenticated()
+    public function testUserCanViewAProfile()
     {
         $user = factory(User::class)->make();
 
@@ -90,11 +96,129 @@ class CreateContractTest extends TestCase
         $user = factory(User::class)->make();
 
         $response = $this->actingAs($user)->post($this->templatePostRoute(), [
-            'email' => $user->email,
-            'password' => '$password',
-            'remember' => 'on',
+            'id' => '1',
         ]);
         $response->assertSuccessful();
         $response->assertSee('id=\"fields\"', false);
+    }
+
+    public function testCheckFieldsTemplateFail()
+    {
+        $user = factory(User::class)->make();
+
+        $response = $this->actingAs($user)->post($this->checkPostRoute(), [
+            'address' => '444',
+        ]);
+        $response->assertSuccessful();
+        $response->assertJsonFragment(['ret_status'=>'not ok']);
+    }
+
+    public function testCheckFieldsTemplateTrue()
+    {
+        $user = factory(User::class)->make();
+
+        $response = $this->actingAs($user)->post($this->checkPostRoute(), [
+            'address' => '0xb041DC94B1a46FA767c81C31c074ADe451D02102',
+        ]);
+        $response->assertSuccessful();
+        $response->assertJsonFragment(['ret_status'=>'ok']);
+    }
+
+    public function testCreateContract()
+    {
+        $user = factory(User::class)->create([
+            'id' => 1,
+        ]);
+
+        $response = $this->actingAs($user)->post($this->createPostRoute(), [
+            'creator' => '0xd45f980F8156a39E0C3E235Af1fd8A80fd72d517',
+            'IRC_contract' => '0xb2323BceAa74b4d4dF9e6F7cf493d0E2b1A6a0Dc',
+            'template_id' => '1',
+            'test_user_id' => $user->id
+        ]);
+        $response->assertSuccessful();
+        $response->assertJsonFragment(['ret_status'=>'ok']);
+    }
+
+    public function testGetIdContract()
+    {
+        $user = factory(User::class)->create([
+            'id' => 1,
+        ]);
+
+        $response = $this->actingAs($user)->post($this->createPostRoute(), [
+            'creator' => '0xd45f980F8156a39E0C3E235Af1fd8A80fd72d517',
+            'IRC_contract' => '0xb2323BceAa74b4d4dF9e6F7cf493d0E2b1A6a0Dc',
+            'template_id' => '1',
+            'test_user_id' => $user->id
+        ]);
+
+        $response = $this->actingAs($user)->post($this->createPostRoute(), [
+            'creator' => '0xd45f980F8156a39E0C3E235Af1fd8A80fd72d517',
+            'IRC_contract' => '0xb2323BceAa74b4d4dF9e6F7cf493d0E2b1A6a0Dc',
+            'template_id' => '1',
+            'test_user_id' => $user->id
+        ]);
+        $response->assertSuccessful();
+        $response->assertSee('contract_id',false);
+    }
+
+    public function testGetContractTable()
+    {
+        $user = factory(User::class)->create([
+            'id' => 1,
+        ]);
+
+        $response = $this->actingAs($user)->post($this->createPostRoute(), [
+            'creator' => '0xd45f980F8156a39E0C3E235Af1fd8A80fd72d517',
+            'IRC_contract' => '0xb2323BceAa74b4d4dF9e6F7cf493d0E2b1A6a0Dc',
+            'template_id' => '1',
+            'test_user_id' => $user->id
+        ]);
+
+        $response = $this->actingAs($user)->post($this->contractsPostRoute(), [
+            'test_user_id' => $user->id
+        ]);
+        $response->assertSuccessful();
+        $response->assertJsonFragment(['ret_status'=>'ok']);
+        $response->assertSee('contracts_view',false);
+    }
+
+    public function testGetContractGuide()
+    {
+        $user = factory(User::class)->create([
+            'id' => 1,
+        ]);
+
+        $response = $this->actingAs($user)->post($this->createPostRoute(), [
+            'creator' => '0xd45f980F8156a39E0C3E235Af1fd8A80fd72d517',
+            'IRC_contract' => '0xb2323BceAa74b4d4dF9e6F7cf493d0E2b1A6a0Dc',
+            'template_id' => '1',
+            'test_user_id' => $user->id
+        ]);
+
+        $response = $this->actingAs($user)->get($this->tableRoute());
+        $response->assertSuccessful();
+        $response->assertSee('instruction_form',false);
+    }
+
+    public function testReclaimContract()
+    {
+        $user = factory(User::class)->create([
+            'id' => 1,
+        ]);
+
+        $response = $this->actingAs($user)->post($this->createPostRoute(), [
+            'creator' => '0xd45f980F8156a39E0C3E235Af1fd8A80fd72d517',
+            'IRC_contract' => '0xb2323BceAa74b4d4dF9e6F7cf493d0E2b1A6a0Dc',
+            'template_id' => '1',
+            'test_user_id' => $user->id
+        ]);
+
+        $response = $this->actingAs($user)->post($this->removePostRoute(), [
+            'id' => $response->json('contract_id'),
+            'test_user_id' => $user->id
+        ]);
+        $response->assertSuccessful();
     }
 }

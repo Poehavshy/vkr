@@ -18,10 +18,10 @@ class ContractController extends Controller
         $this->middleware('auth');
     }
 
-    public function getInstruction()
+    public function getInstruction(Request $request)
     {
-        if (!empty($_POST) && isset($_POST['instruction'])){
-            $instruction_view = view('includes.form.instruction', ['instruction' => $_POST['instruction']])->render();
+        if (!empty($request->post('instruction'))){
+            $instruction_view = view('includes.form.instruction', ['instruction' => $request->post('instruction')])->render();
             return array('ret_status' => 'ok', 'instruction_view' => $instruction_view);
         }
         else {
@@ -29,13 +29,13 @@ class ContractController extends Controller
         }
     }
 
-    public function removeContract()
+    public function removeContract(Request $request)
     {
-        if (!empty($_POST) && isset($_POST['id'])){
+        if (!empty($request->post('id'))){
             $contract = new Contract();
-            if ($contract->destroyContract($_POST['id'])){
-                DBContract::where('id', $_POST['id'])->delete();
-                return $this->getContracts();
+            if ($contract->destroyContract($request->post('id'))){
+                DBContract::where('id', $request->post('id'))->delete();
+                return $this->getContracts($request);
             }
             else {
                 return array('ret_status' => 'not ok', 'error_text' => 'Remove error');
@@ -46,10 +46,16 @@ class ContractController extends Controller
         }
     }
 
-    public function getContracts()
+    public function getContracts(Request $request)
     {
+        if ($request->post('test_user_id')) {
+            $user_id = $request->post('test_user_id');
+        }
+        else {
+            $user_id = Auth::user()->id;
+        }
         $ids = array();
-        $tmp = DBContract::select('id')->where('userId', Auth::user()->id)->get();
+        $tmp = DBContract::select('id')->where('userId', $user_id)->get();
         foreach ($tmp as $id) {
             $ids[] = $id['id'];
         }
@@ -72,7 +78,7 @@ class ContractController extends Controller
                 $full_guide = '<p class=\"fs-20 fw-6\"><strong>Инструкция для владельца:</strong></p>';
                 foreach ($item['creator_guide'] as $guide){
                     if ($guide['status_id'] < $item['status']['id']){
-                        $full_guide .= '<p class=\"fs-18\"><strong>'.$guide['guide'].'</strong></p>';
+                        $full_guide .= '<p class=\"fs-18 text_decor-lt\"><strong>'.$guide['guide'].'</strong></p>';
                     }
                     elseif ($guide['status_id'] == $item['status']['id']){
                         $full_guide .= '<p class=\"fs-18\"><strong><u>'.$guide['guide'].'</u></strong></p>';
@@ -84,7 +90,7 @@ class ContractController extends Controller
                 $full_guide .= '<hr><p class=\"fs-20 fw-6\"><strong>Инструкция для пользователя:</strong></p>';
                 foreach ($item['users_guide'] as $guide){
                     if ($guide['status_id'] < $item['status']['id']){
-                        $full_guide .= '<p class=\"fs-18\"><strong>'.$guide['guide'].'</strong></p>';
+                        $full_guide .= '<p class=\"fs-18 text_decor-lt\"><strong>'.$guide['guide'].'</strong></p>';
                     }
                     elseif ($guide['status_id'] == $item['status']['id']){
                         $full_guide .= '<p class=\"fs-18\"><strong><u>'.$guide['guide'].'</u></strong></p>';
@@ -100,22 +106,29 @@ class ContractController extends Controller
             return array('ret_status' => 'ok', 'contracts_view' => $contracts_view);
         }
     }
-    public function createContract()
+    public function createContract(Request $request)
     {
-        if (!empty($_POST)){
-            $params = array('_token', 'template_id');
+        if (!empty($request->post())){
+
+            $params = array('_token', 'template_id', 'test_user_id');
             $fields = array();
-            foreach ($_POST as $key => $value){
+            foreach ($request->post() as $key => $value){
                 if (!in_array($key, $params)){
                     $fields[$key] = $value;
                 }
             }
             $contract = new Contract();
-            $contract_id = $contract->createContract($_POST['template_id'], $fields);
+            $contract_id = $contract->createContract($request->post('template_id'), $fields);
             if ($contract_id === false){
                 return array('ret_status' => 'error', 'error_text' => 'Contract api return false. Retry.');
             }
-            DBContract::create(['id'=>$contract_id, 'userId'=>Auth::user()->id]);
+            if ($request->post('test_user_id')) {
+                $user_id = $request->post('test_user_id');
+            }
+            else {
+                $user_id = Auth::user()->id;
+            }
+            DBContract::create(['id'=>$contract_id, 'userId'=>$user_id]);
             return array('ret_status' => 'ok', 'contract_id' => $contract_id);
         }
         else {
@@ -123,18 +136,17 @@ class ContractController extends Controller
         }
     }
 
-    public function checkFields()
+    public function checkFields(Request $request)
     {
         $error = array();
-        if (!empty($_POST)){
-            foreach ($_POST as $key => $field){
+        if (!empty($request->post())){
+            foreach ($request->post() as $key => $field){
                 if (strpos($key, '|')){
                     $key = substr($key, strpos($key, '|') + 1, strlen($key));
                 }
-                continue;
                 if ($key === 'address'){
                     $eth_valid = new EthereumValidator();
-                    if($eth_valid->isAddress($field) !== true){
+                    if(!$eth_valid->isAddress($field) && !preg_match('/^(0x)?[0-9a-fA-F]{40}$/', $field)){
                         $error[$key] = 'Некорректный адрес кошелька Ethereum';
                     }
                 }
@@ -168,9 +180,9 @@ class ContractController extends Controller
 
     public function getTemplate(Request $request)
     {
-        if (isset($_POST['id']) && !empty($_POST['id'])) {
+        if (!empty($request->post('id'))) {
             $contract = new Contract();
-            $template = $contract->getTemplate($_POST['id']);
+            $template = $contract->getTemplate($request->post('id'));
             if ($template === false){
                 return array('ret_status' => 'error', 'error_text' => 'Contract api return false. Retry.');
             }
