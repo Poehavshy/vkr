@@ -64,6 +64,16 @@ class CreateContractTest extends TestCase
         return route('login');
     }
 
+    protected function getCreator()
+    {
+        return "0x858621C069DeEB1b1c69cAfA1f4A550dcFb734eb";
+    }
+
+    protected function getIRC()
+    {
+        return "0x5e8D72d05E7683b959741FA3858deD5C980506EF";
+    }
+
     public function testGuestCannotViewAProfile()
     {
         $response = $this->get($this->contractRoute());
@@ -118,7 +128,7 @@ class CreateContractTest extends TestCase
         $user = factory(User::class)->make();
 
         $response = $this->actingAs($user)->post($this->checkPostRoute(), [
-            'address' => '0xb041DC94B1a46FA767c81C31c074ADe451D02102',
+            'address' => $this->getCreator(),
         ]);
         $response->assertSuccessful();
         $response->assertJsonFragment(['ret_status'=>'ok']);
@@ -131,8 +141,8 @@ class CreateContractTest extends TestCase
         ]);
 
         $response = $this->actingAs($user)->post($this->createPostRoute(), [
-            'creator' => '0xd45f980F8156a39E0C3E235Af1fd8A80fd72d517',
-            'IRC_contract' => '0xb2323BceAa74b4d4dF9e6F7cf493d0E2b1A6a0Dc',
+            'creator' => $this->getCreator(),
+            'IRC_contract' => $this->getIRC(),
             'template_id' => '1',
             'test_user_id' => $user->id
         ]);
@@ -147,15 +157,15 @@ class CreateContractTest extends TestCase
         ]);
 
         $response = $this->actingAs($user)->post($this->createPostRoute(), [
-            'creator' => '0xd45f980F8156a39E0C3E235Af1fd8A80fd72d517',
-            'IRC_contract' => '0xb2323BceAa74b4d4dF9e6F7cf493d0E2b1A6a0Dc',
+            'creator' => $this->getCreator(),
+            'IRC_contract' => $this->getIRC(),
             'template_id' => '1',
             'test_user_id' => $user->id
         ]);
 
         $response = $this->actingAs($user)->post($this->createPostRoute(), [
-            'creator' => '0xd45f980F8156a39E0C3E235Af1fd8A80fd72d517',
-            'IRC_contract' => '0xb2323BceAa74b4d4dF9e6F7cf493d0E2b1A6a0Dc',
+            'creator' => $this->getCreator(),
+            'IRC_contract' => $this->getIRC(),
             'template_id' => '1',
             'test_user_id' => $user->id
         ]);
@@ -170,8 +180,8 @@ class CreateContractTest extends TestCase
         ]);
 
         $response = $this->actingAs($user)->post($this->createPostRoute(), [
-            'creator' => '0xd45f980F8156a39E0C3E235Af1fd8A80fd72d517',
-            'IRC_contract' => '0xb2323BceAa74b4d4dF9e6F7cf493d0E2b1A6a0Dc',
+            'creator' => $this->getCreator(),
+            'IRC_contract' => $this->getIRC(),
             'template_id' => '1',
             'test_user_id' => $user->id
         ]);
@@ -191,8 +201,8 @@ class CreateContractTest extends TestCase
         ]);
 
         $response = $this->actingAs($user)->post($this->createPostRoute(), [
-            'creator' => '0xd45f980F8156a39E0C3E235Af1fd8A80fd72d517',
-            'IRC_contract' => '0xb2323BceAa74b4d4dF9e6F7cf493d0E2b1A6a0Dc',
+            'creator' => $this->getCreator(),
+            'IRC_contract' => $this->getIRC(),
             'template_id' => '1',
             'test_user_id' => $user->id
         ]);
@@ -209,8 +219,8 @@ class CreateContractTest extends TestCase
         ]);
 
         $response = $this->actingAs($user)->post($this->createPostRoute(), [
-            'creator' => '0xd45f980F8156a39E0C3E235Af1fd8A80fd72d517',
-            'IRC_contract' => '0xb2323BceAa74b4d4dF9e6F7cf493d0E2b1A6a0Dc',
+            'creator' => $this->getCreator(),
+            'IRC_contract' => $this->getIRC(),
             'template_id' => '1',
             'test_user_id' => $user->id
         ]);
