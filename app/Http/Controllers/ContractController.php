@@ -106,6 +106,62 @@ class ContractController extends Controller
             return array('ret_status' => 'ok', 'contracts_view' => $contracts_view);
         }
     }
+
+    public function getExchange(Request $request)
+    {
+        $ids = array();
+        $tmp = DBContract::select('id')->get();
+        foreach ($tmp as $id) {
+            $ids[] = $id['id'];
+        }
+        if (empty($ids)) {
+            return array('ret_status' => 'not ok', 'ret_text' => 'Нет контрактов.');
+        } else {
+            $contract = new Contract();
+            $contracts = $contract->getContracts($ids);
+            if ($contracts === false){
+                return array('ret_status' => 'error', 'error_text' => 'Contract api return false. Retry.');
+            }
+            foreach ($contracts as $key => $item){
+                if (!in_array($item['id'], $ids)){
+                    unset($contracts[$key]);
+                    continue;
+                }
+                $contracts[$key]['template'] = $contract->getTemplate($item['template_id'])['name'];
+            }
+            foreach ($contracts as $key => $item){
+                $full_guide = '<p class=\"fs-20 fw-6\"><strong>Инструкция для владельца:</strong></p>';
+                foreach ($item['creator_guide'] as $guide){
+                    if ($guide['status_id'] < $item['status']['id']){
+                        $full_guide .= '<p class=\"fs-18 text_decor-lt\"><strong>'.$guide['guide'].'</strong></p>';
+                    }
+                    elseif ($guide['status_id'] == $item['status']['id']){
+                        $full_guide .= '<p class=\"fs-18\"><strong><u>'.$guide['guide'].'</u></strong></p>';
+                    }
+                    else {
+                        $full_guide .= '<p class=\"fs-18\">'.$guide['guide'].'</p>';
+                    }
+                }
+                $full_guide .= '<hr><p class=\"fs-20 fw-6\"><strong>Инструкция для пользователя:</strong></p>';
+                foreach ($item['users_guide'] as $guide){
+                    if ($guide['status_id'] < $item['status']['id']){
+                        $full_guide .= '<p class=\"fs-18 text_decor-lt\"><strong>'.$guide['guide'].'</strong></p>';
+                    }
+                    elseif ($guide['status_id'] == $item['status']['id']){
+                        $full_guide .= '<p class=\"fs-18\"><strong><u>'.$guide['guide'].'</u></strong></p>';
+                    }
+                    else {
+                        $full_guide .= '<p class=\"fs-18\">'.$guide['guide'].'</p>';
+                    }
+                }
+                $contracts[$key]['guide'] = $full_guide;
+            }
+
+            $contracts_view = view('includes.source.exchange-table', ['contracts' => $contracts])->render();
+            return array('ret_status' => 'ok', 'contracts_view' => $contracts_view);
+        }
+    }
+
     public function createContract(Request $request)
     {
         if (!empty($request->post())){

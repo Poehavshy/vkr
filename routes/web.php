@@ -34,6 +34,11 @@ Route::get('/test', function () {
     return view('pages/test');
 });
 
+Route::get('/contracts', function () {
+    return view('pages/contracts');
+});
+
+Route::post('/contract/get_exchange', 'ContractController@getExchange');
 Route::post('/contract/get_instruction/', 'ContractController@getInstruction');
 Route::post('/contract/remove/', 'ContractController@removeContract');
 Route::post('/contract/get_contracts/', 'ContractController@getContracts');

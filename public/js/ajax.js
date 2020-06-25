@@ -85,7 +85,42 @@ $(document).ready(function () {
     else if (window.location.pathname === '/profile/my-contract'){
         getContracts();
     }
+    else if (window.location.pathname === '/contracts') {
+        getExchange();
+    }
 });
+
+function getExchange() {
+    $.ajax({
+        url: "/contract/get_exchange/",
+        method: "POST",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        data: {},
+        success: function (response) {
+            if (response.ret_status === 'ok'){
+                $('#contracts_table tbody').html(response.contracts_view);
+                activateCopyBtn();
+            }
+            else if (response.ret_status === 'not ok'){
+                $('#error_message p').html(response.ret_text);
+                $('#contracts_table').addClass('display_none');
+            }
+            else {
+                $('#error_message p').html('Error: unexpected error.');
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log('jqXHR:');
+            console.log(jqXHR);
+            console.log('textStatus:');
+            console.log(textStatus);
+            console.log('errorThrown:');
+            console.log(errorThrown);
+        }
+    });
+}
 
 function getContracts() {
     $.ajax({
